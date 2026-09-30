@@ -3,72 +3,66 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Gladiador Rojo - Final Battle</title>
+<title>Gladiador Rojo - Fixed</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;touch-action:none;user-select:none;}
-  body{background:#0a0a0a;color:#fff;font-family:'Segoe UI',sans-serif;overflow:hidden;height:100vh;width:100vw;display:flex;flex-direction:column;}
-  #topBar{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:linear-gradient(180deg,#1a1a1a,#000);border-bottom:2px solid #c89b3c;z-index:10;}
-  .fighterInfo{display:flex;flex-direction:column;gap:4px;width:42%;}
-  .name{font-weight:900;font-size:13px;letter-spacing:1px;}
-  .name.rojo{color:#ff4444;} .name.azul{color:#44aaff;}
-  .hpWrap{background:#222;height:18px;border-radius:10px;border:1.5px solid #c89b3c;overflow:hidden;}
-  .hp{height:100%;transition:width 0.2s;}
-  .hp.rojo{background:linear-gradient(90deg,#ff0000,#ff8a00);}
-  .hp.azul{background:linear-gradient(90deg,#0066ff,#00ffcc);}
-  #levelBadge{background:#c89b3c;color:#000;font-weight:900;padding:4px 12px;border-radius:20px;font-size:12px;}
-  #gameWrap{flex:1;position:relative;background:radial-gradient(ellipse at center bottom,#4a2c0a 0%,#1e0f00 60%,#0a0a0a 100%);overflow:hidden;}
-  canvas{width:100%;height:100%;display:block;}
-  #effectText{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);font-size:42px;font-weight:900;color:#ffcc00;text-shadow:0 0 20px #ff0000, 4px 4px 0 #000;opacity:0;pointer-events:none;z-index:5;transition:all 0.2s;}
-  #controls{position:absolute;bottom:0;left:0;right:0;height:46%;display:flex;justify-content:space-between;align-items:flex-end;padding:10px 10px 14px 10px;background:linear-gradient(0deg,rgba(0,0,0,0.9) 0%, transparent 100%);z-index:4;}
-  .side{display:flex;flex-direction:column;gap:8px;}
-  .row{display:flex;gap:8px;justify-content:center;}
-  .btn{width:58px;height:58px;background:linear-gradient(145deg,#222,#111);border:2px solid #c89b3c;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:22px;color:#ffd700;box-shadow:0 4px 0 #000;cursor:pointer;}
-  .btn:active{transform:translateY(4px);background:#c89b3c;color:#000;}
-  .btn.attack{width:78px;height:78px;font-size:26px;background:linear-gradient(145deg,#331111,#220000);border-color:#ff4444;}
-  .btn.kick{background:linear-gradient(145deg,#332200,#221100);border-color:#ffaa00;}
-  #winScreen{position:absolute;inset:0;background:rgba(0,0,0,0.92);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:20;text-align:center;padding:20px;}
-  #winScreen h1{font-size:42px;color:#ffd700;margin-bottom:10px;}
-  #winScreen button{padding:12px 28px;background:#c89b3c;color:#000;border:none;border-radius:30px;font-weight:900;font-size:16px;}
+*{margin:0;padding:0;box-sizing:border-box;touch-action:none;user-select:none}
+body{background:#000;color:#fff;font-family:Arial;overflow:hidden;height:100dvh;display:flex;flex-direction:column}
+#topBar{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#111;border-bottom:2px solid #c89b3c;height:52px}
+.hpWrap{background:#222;height:16px;border-radius:10px;border:1px solid #c89b3c;overflow:hidden;width:100%;margin-top:3px}
+.hp{height:100%}.hp.rojo{background:linear-gradient(90deg,#ff0000,#ff8a00)}.hp.azul{background:linear-gradient(90deg,#0066ff,#00ffcc)}
+.name{font-weight:900;font-size:12px}
+#level{background:#c89b3c;color:#000;font-weight:900;padding:3px 10px;border-radius:15px;font-size:11px}
+#game{flex:1;position:relative;background:#1a0f00;overflow:hidden}
+canvas{width:100%;height:100%;display:block}
+#fx{position:absolute;top:28%;left:50%;transform:translate(-50%,-50%);font-size:38px;font-weight:900;color:#ffcc00;text-shadow:0 0 15px red,2px 2px 0 #000;opacity:0;pointer-events:none;transition:0.2s;z-index:5}
+#controls{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-end;padding:8px 8px 12px;background:linear-gradient(0deg,#000 0%,transparent 100%);z-index:10}
+.side{display:flex;flex-direction:column;gap:6px}.row{display:flex;gap:6px;justify-content:center}
+.btn{width:54px;height:54px;background:#1f1f1f;border:2px solid #c89b3c;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;color:#ffd700;box-shadow:0 3px 0 #000;font-weight:900}
+.btn:active{transform:translateY(3px);background:#c89b3c;color:#000}
+.btn.att{width:72px;height:72px;font-size:22px;flex-direction:column}.btn.att.red{border-color:#ff3333;background:#331111}.btn.att.yellow{border-color:#ffaa00;background:#332200}
+#win{position:absolute;inset:0;background:rgba(0,0,0,0.9);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:20;text-align:center}
+#win h1{font-size:36px;color:#ffd700}#win button{padding:12px 24px;background:#c89b3c;color:#000;border:none;border-radius:25px;font-weight:900;margin-top:15px}
 </style>
 </head>
 <body>
 <div id="topBar">
-  <div class="fighterInfo">
-    <div class="name rojo">⚔️ ROJO - TU</div>
-    <div class="hpWrap"><div id="hpRed" class="hp rojo" style="width:100%"></div></div>
-  </div>
-  <div id="levelBadge">NIVEL 1</div>
-  <div class="fighterInfo" style="align-items:flex-end">
-    <div class="name azul">ENEMIGO AZUL</div>
-    <div class="hpWrap" style="width:100%"><div id="hpBlue" class="hp azul" style="width:100%"></div></div>
-  </div>
+<div style="width:38%"><div class="name" style="color:#ff4444">⚔️ ROJO - TU</div><div class="hpWrap"><div id="hpR" class="hp rojo" style="width:100%"></div></div></div>
+<div id="level">NIVEL 1</div>
+<div style="width:38%;text-align:right"><div class="name" style="color:#44aaff">ENEMIGO AZUL</div><div class="hpWrap"><div id="hpB" class="hp azul" style="width:100%"></div></div></div>
 </div>
-<div id="gameWrap">
-  <canvas id="c"></canvas>
-  <div id="effectText">¡CRITICO!</div>
-  <div id="controls">
-    <div class="side">
-      <div class="row"><div class="btn" data-k="w">▲</div></div>
-      <div class="row"><div class="btn" data-k="a">◀</div><div class="btn" data-k="s">▼</div><div class="btn" data-k="d">▶</div></div>
-    </div>
-    <div class="side">
-      <div class="row">
-        <div class="btn attack" data-k="p">👊<span style="font-size:10px">GOLPE</span></div>
-        <div class="btn attack kick" data-k="k">🦶<span style="font-size:10px">PATADA</span></div>
-      </div>
-    </div>
-  </div>
-  <div id="winScreen">
-    <h1 id="winTitle">¡VICTORIA!</h1>
-    <p id="winDesc"></p>
-    <button onclick="nextLevel()">SIGUIENTE NIVEL →</button>
-  </div>
+<div id="game">
+<canvas id="c"></canvas>
+<div id="fx">¡GOLPE!</div>
+<div id="controls">
+<div class="side"><div class="row"><div class="btn" id="bU">▲</div></div><div class="row"><div class="btn" id="bL">◀</div><div class="btn" id="bD">▼</div><div class="btn" id="bR">▶</div></div></div>
+<div class="side"><div class="row"><div class="btn att red" id="bP">👊<span style="font-size:9px">GOLPE</span></div><div class="btn att yellow" id="bK">🦶<span style="font-size:9px">PATADA</span></div></div></div>
+</div>
+<div id="win"><h1 id="wT">¡VICTORIA!</h1><p id="wD"></p><button onclick="nextLvl()">SIGUIENTE →</button></div>
 </div>
 <script>
-const canvas=document.getElementById('c'), ctx=canvas.getContext('2d');
-function resize(){canvas.width=canvas.offsetWidth*2; canvas.height=canvas.offsetHeight*2;}
-window.addEventListener('resize',resize); resize();
-let audioCtx; function initAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();}
-function playSound(t){initAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);
-if(t==='punch'){o.frequency.value=120;g.gain.setValueAtTime(0.8,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+0.15);o.type='square';}
-else if(t==='
+const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');let W=0,H=0,floor=0;
+function resize(){W=canvas.clientWidth;H=canvas.clientHeight;canvas.width=W;canvas.height=H;floor=H*0.62;}
+window.addEventListener('resize',resize);resize();
+let audio=null;function snd(t){try{if(!audio)audio=new(window.AudioContext||window.webkitAudioContext)();let o=audio.createOscillator(),g=audio.createGain();o.connect(g);g.connect(audio.destination);if(t==='p'){o.frequency.value=140;g.gain.setValueAtTime(0.6,audio.currentTime);g.gain.exponentialRampToValueAtTime(0.01,audio.currentTime+0.12);o.type='square';}else if(t==='k'){o.frequency.value=90;g.gain.setValueAtTime(0.8,audio.currentTime);g.gain.exponentialRampToValueAtTime(0.01,audio.currentTime+0.2);o.type='sawtooth';}else{o.frequency.value=50;g.gain.setValueAtTime(0.9,audio.currentTime);g.gain.exponentialRampToValueAtTime(0.01,audio.currentTime+0.3);o.type='square';}o.start();o.stop(audio.currentTime+0.3);}catch(e){}}
+let lvl=1;let red={x:80,y:0,hp:100,max:100,vx:0,facing:1,atk:0,hitT:0};let blue={x:0,hp:100,max:100,vx:0,facing:-1,atk:0,ai:0,hitT:0};let parts=[],shake=0,keys={u:0,d:0,l:0,r:0};
+function init(){red.max=100+lvl*10;red.hp=red.max;blue.max=80+lvl*20;blue.hp=blue.max;red.x=W*0.22;blue.x=W*0.78;red.y=0;parts=[];shake=0;document.getElementById('hpR').style.width='100%';document.getElementById('hpB').style.width='100%';document.getElementById('level').innerText='NIVEL '+lvl;}
+function ui(){document.getElementById('hpR').style.width=Math.max(0,red.hp/red.max*100)+'%';document.getElementById('hpB').style.width=Math.max(0,blue.hp/blue.max*100)+'%';}
+function addP(x,y,c,n){for(let i=0;i<n;i++)parts.push({x,y,vx:(Math.random()-0.5)*10,vy:(Math.random()-1)*10-1,life:1,c,s:Math.random()*4+2});}
+function txt(t,col){const e=document.getElementById('fx');e.innerText=t;e.style.color=col;e.style.opacity=1;e.style.transform='translate(-50%,-50%) scale(1.2)';setTimeout(()=>{e.style.opacity=0;e.style.transform='translate(-50%,-80%) scale(1)';},350);}
+function hit(att,def,type){if(att.atk>0)return;att.atk=type==='k'?26:18;snd(type);setTimeout(()=>{let dist=Math.abs(att.x-def.x);let range=type==='k'?85:65;if(dist<range){let dmg=type==='k'?20:13;if(type==='k'&&Math.random()<0.35){dmg*=1.7;txt('¡CRITICO!','#ff2222');shake=10;snd('h');}else if(Math.random()<0.2){txt('¡GOLPE!','#ffcc00');}def.hp-=dmg;def.hitT=10;def.vx+=att.facing*(type==='k'?10:6);addP(def.x,floor-45+def.y,def===blue?'#ff2222':'#ff5555',type==='k'?18:10);addP(def.x,floor-35+def.y,'#ffcc00',5);ui();if(def.hp<=0)win(def);}},type==='k'?160:80);}
+function win(loser){const w=document.getElementById('win');w.style.display='flex';if(loser===blue){document.getElementById('wT').innerText=lvl>=5?'¡CAMPEÓN!':'¡VICTORIA!';document.getElementById('wD').innerText=lvl>=5?'¡Dominaste el Coliseo!':'Derrotaste nivel '+lvl;addP(blue.x,floor-40,'#ffd700',35);}else{document.getElementById('wT').innerText='¡DERROTA!';document.getElementById('wD').innerText='Te venció. Intenta de nuevo';}}
+window.nextLvl=function(){document.getElementById('win').style.display='none';if(red.hp<=0)lvl=1;else lvl=Math.min(lvl+1,5);init();}
+function ai(){let d=red.x-blue.x;blue.ai--;if(blue.ai<=0){if(Math.abs(d)<75){if(Math.random()<0.7)hit(blue,red,Math.random()<0.5?'p':'k');}else{blue.vx=Math.sign(d)*(1.3+lvl*0.4);}blue.ai=25+Math.random()*35;}}
+function bind(id,key,action){let el=document.getElementById(id);const down=(e)=>{e.preventDefault();keys[key]=1;if(action)action();};const up=(e)=>{keys[key]=0;};el.addEventListener('touchstart',down,{passive:false});el.addEventListener('touchend',up);el.addEventListener('mousedown',down);el.addEventListener('mouseup',up);}
+bind('bU','u');bind('bD','d');bind('bL','l');bind('bR','r');bind('bP',null,()=>{hit(red,blue,'p');});bind('bK',null,()=>{hit(red,blue,'k');});
+function loop(){requestAnimationFrame(loop);red.vx*=0.82;if(keys.l){red.vx=-4.5;red.facing=-1;}if(keys.r){red.vx=4.5;red.facing=1;}if(keys.u)red.y=Math.max(-55,red.y-3);if(keys.d)red.y=Math.min(35,red.y+3);red.x+=red.vx;ai();blue.vx*=0.85;blue.x+=blue.vx;blue.facing=red.x>blue.x?1:-1;if(red.atk>0)red.atk--;if(blue.atk>0)blue.atk--;if(red.hitT>0)red.hitT--;if(blue.hitT>0)blue.hitT--;red.x=Math.max(25,Math.min(W-25,red.x));blue.x=Math.max(25,Math.min(W-25,blue.x));
+ctx.save();if(shake>0){ctx.translate((Math.random()-0.5)*shake,(Math.random()-0.5)*shake);shake*=0.9;}ctx.clearRect(0,0,W,H);
+if(lvl==1)ctx.fillStyle='#2b1a08';else if(lvl==2)ctx.fillStyle='#1e122b';else if(lvl==3)ctx.fillStyle='#0a222b';else ctx.fillStyle='#2b0808';ctx.fillRect(0,0,W,floor+35);
+ctx.fillStyle='#e6c07a';ctx.fillRect(0,floor+35,W,H-floor-35);ctx.fillStyle='#c8a45a';for(let i=0;i<W;i+=70)ctx.fillRect(i,floor+35,35,5);
+function drawF(f,isRed){ctx.save();ctx.translate(f.x,floor+15+f.y);ctx.scale(f.facing,1);let at=f.atk>8;ctx.fillStyle='rgba(0,0,0,0.4)';ctx.beginPath();ctx.ellipse(0,38,22,6,0,0,Math.PI*2);ctx.fill();if(f.hitT>0&&f.hitT%2==0)ctx.globalAlpha=0.5;ctx.fillStyle=isRed?'#7a0000':'#001a6b';ctx.fillRect(-15,0,13,28);ctx.fillRect(2,0,13,28);ctx.fillStyle=isRed?'#d00000':'#0044cc';ctx.fillRect(-16,-32,32,32);ctx.fillStyle='#666';ctx.fillRect(-14,-30,28,16);ctx.fillStyle='#ffdbac';let armX=at?16:8;ctx.fillRect(armX,-24,at?24:12,9);if(at){ctx.fillStyle=isRed?'#ff4400':'#00aaff';ctx.beginPath();ctx.arc(armX+24,-20,9,0,Math.PI*2);ctx.fill();}ctx.fillStyle='#ffdbac';ctx.fillRect(-11,-52,22,18);ctx.fillStyle='#555';ctx.fillRect(-13,-54,26,20);ctx.fillStyle='#111';ctx.fillRect(-11,-46,22,4);ctx.fillStyle=isRed?'#ff0000':'#00aaff';ctx.fillRect(-2,-60,4,10);ctx.restore();}
+drawF(blue,false);drawF(red,true);
+for(let i=parts.length-1;i>=0;i--){let p=parts[i];p.x+=p.vx;p.y+=p.vy;p.vy+=0.35;p.life-=0.025;if(p.life<=0)parts.splice(i,1);else{ctx.globalAlpha=p.life;ctx.fillStyle=p.c;ctx.fillRect(p.x,p.y,p.s,p.s);}}ctx.globalAlpha=1;ctx.restore();}
+init();loop();
+</script>
+</body>
+</html>
