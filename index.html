@@ -3,100 +3,72 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Gladiadores - Coliseo</title>
+<title>Gladiador Rojo - Final Battle</title>
 <style>
-  body{margin:0;background:#111;color:#fff;font-family:Arial;overflow:hidden;touch-action:none}
-  #game{width:100vw;height:100vh;display:block;background: radial-gradient(circle at 50% 0%, #8a5a2b 0%, #3d2310 40%, #1a0f07 100%);}
-  #ui{position:absolute;top:10px;left:0;width:100%;display:flex;justify-content:space-between;padding:0 20px;box-sizing:border-box;font-weight:bold;text-shadow:2px 2px 4px #000}
- .bar{width:38vw;height:22px;background:#333;border:2px solid #d4af37;border-radius:10px;overflow:hidden}
- .fill{height:100%;transition:width 0.2s}
-  #p1fill{background:linear-gradient(90deg,#ff2a2a,#ff8a00);width:100%}
-  #p2fill{background:linear-gradient(90deg,#2a8aff,#00ffcc);width:100%}
-  #controls{position:absolute;bottom:10px;left:0;width:100%;display:flex;justify-content:space-between;padding:10px;box-sizing:border-box}
- .pad{display:grid;grid-template-columns:repeat(3,60px);gap:8px}
-  button{width:60px;height:60px;border-radius:12px;border:2px solid #d4af37;background:rgba(0,0,0,0.6);color:#fff;font-size:22px;font-weight:bold;user-select:none}
-  button:active{background:#d4af37;color:#000}
-  #center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;background:rgba(0,0,0,0.85);padding:25px;border:3px solid #d4af37;border-radius:15px;display:none}
-  h1{margin:0 0 10px 0;color:#d4af37}
+  *{margin:0;padding:0;box-sizing:border-box;touch-action:none;user-select:none;}
+  body{background:#0a0a0a;color:#fff;font-family:'Segoe UI',sans-serif;overflow:hidden;height:100vh;width:100vw;display:flex;flex-direction:column;}
+  #topBar{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:linear-gradient(180deg,#1a1a1a,#000);border-bottom:2px solid #c89b3c;z-index:10;}
+  .fighterInfo{display:flex;flex-direction:column;gap:4px;width:42%;}
+  .name{font-weight:900;font-size:13px;letter-spacing:1px;}
+  .name.rojo{color:#ff4444;} .name.azul{color:#44aaff;}
+  .hpWrap{background:#222;height:18px;border-radius:10px;border:1.5px solid #c89b3c;overflow:hidden;}
+  .hp{height:100%;transition:width 0.2s;}
+  .hp.rojo{background:linear-gradient(90deg,#ff0000,#ff8a00);}
+  .hp.azul{background:linear-gradient(90deg,#0066ff,#00ffcc);}
+  #levelBadge{background:#c89b3c;color:#000;font-weight:900;padding:4px 12px;border-radius:20px;font-size:12px;}
+  #gameWrap{flex:1;position:relative;background:radial-gradient(ellipse at center bottom,#4a2c0a 0%,#1e0f00 60%,#0a0a0a 100%);overflow:hidden;}
+  canvas{width:100%;height:100%;display:block;}
+  #effectText{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);font-size:42px;font-weight:900;color:#ffcc00;text-shadow:0 0 20px #ff0000, 4px 4px 0 #000;opacity:0;pointer-events:none;z-index:5;transition:all 0.2s;}
+  #controls{position:absolute;bottom:0;left:0;right:0;height:46%;display:flex;justify-content:space-between;align-items:flex-end;padding:10px 10px 14px 10px;background:linear-gradient(0deg,rgba(0,0,0,0.9) 0%, transparent 100%);z-index:4;}
+  .side{display:flex;flex-direction:column;gap:8px;}
+  .row{display:flex;gap:8px;justify-content:center;}
+  .btn{width:58px;height:58px;background:linear-gradient(145deg,#222,#111);border:2px solid #c89b3c;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:22px;color:#ffd700;box-shadow:0 4px 0 #000;cursor:pointer;}
+  .btn:active{transform:translateY(4px);background:#c89b3c;color:#000;}
+  .btn.attack{width:78px;height:78px;font-size:26px;background:linear-gradient(145deg,#331111,#220000);border-color:#ff4444;}
+  .btn.kick{background:linear-gradient(145deg,#332200,#221100);border-color:#ffaa00;}
+  #winScreen{position:absolute;inset:0;background:rgba(0,0,0,0.92);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:20;text-align:center;padding:20px;}
+  #winScreen h1{font-size:42px;color:#ffd700;margin-bottom:10px;}
+  #winScreen button{padding:12px 28px;background:#c89b3c;color:#000;border:none;border-radius:30px;font-weight:900;font-size:16px;}
 </style>
 </head>
 <body>
-<canvas id="game"></canvas>
-<div id="ui">
-  <div><div>GLADIADOR ROJO</div><div class="bar"><div id="p1fill" class="fill"></div></div></div>
-  <div style="text-align:right"><div>GLADIADOR AZUL</div><div class="bar"><div id="p2fill" class="fill"></div></div></div>
-</div>
-<div id="controls">
-  <div class="pad">
-    <div></div><button id="w">▲</button><div></div>
-    <button id="a">◀</button><button id="s">▼</button><button id="d">▶</button>
-    <button id="f">👊</button><button id="g" style="grid-column:span 2;width:128px">⚔️ PATADA</button>
+<div id="topBar">
+  <div class="fighterInfo">
+    <div class="name rojo">⚔️ ROJO - TU</div>
+    <div class="hpWrap"><div id="hpRed" class="hp rojo" style="width:100%"></div></div>
   </div>
-  <div class="pad">
-    <div></div><button id="up">▲</button><div></div>
-    <button id="left">◀</button><button id="down">▼</button><button id="right">▶</button>
-    <button id="k">👊</button><button id="l" style="grid-column:span 2;width:128px">⚔️</button>
+  <div id="levelBadge">NIVEL 1</div>
+  <div class="fighterInfo" style="align-items:flex-end">
+    <div class="name azul">ENEMIGO AZUL</div>
+    <div class="hpWrap" style="width:100%"><div id="hpBlue" class="hp azul" style="width:100%"></div></div>
   </div>
 </div>
-<div id="center">
-  <h1 id="winText">¡VICTORIA!</h1>
-  <p>Coliseo - Juego de Gladiadores</p>
-  <button onclick="location.reload()" style="width:200px;height:50px;margin-top:10px">REINICIAR PELEA</button>
+<div id="gameWrap">
+  <canvas id="c"></canvas>
+  <div id="effectText">¡CRITICO!</div>
+  <div id="controls">
+    <div class="side">
+      <div class="row"><div class="btn" data-k="w">▲</div></div>
+      <div class="row"><div class="btn" data-k="a">◀</div><div class="btn" data-k="s">▼</div><div class="btn" data-k="d">▶</div></div>
+    </div>
+    <div class="side">
+      <div class="row">
+        <div class="btn attack" data-k="p">👊<span style="font-size:10px">GOLPE</span></div>
+        <div class="btn attack kick" data-k="k">🦶<span style="font-size:10px">PATADA</span></div>
+      </div>
+    </div>
+  </div>
+  <div id="winScreen">
+    <h1 id="winTitle">¡VICTORIA!</h1>
+    <p id="winDesc"></p>
+    <button onclick="nextLevel()">SIGUIENTE NIVEL →</button>
+  </div>
 </div>
 <script>
-const c=document.getElementById('game'), ctx=c.getContext('2d');
-function resize(){c.width=innerWidth;c.height=innerHeight} resize(); addEventListener('resize',resize);
-let keys={};
-addEventListener('keydown',e=>keys[e.key.toLowerCase()]=true);
-addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
-function bindTouch(id,key){const el=document.getElementById(id); if(!el)return; el.addEventListener('touchstart',e=>{e.preventDefault();keys[key]=true}); el.addEventListener('touchend',e=>{e.preventDefault();keys[key]=false}); el.addEventListener('mousedown',()=>keys[key]=true); el.addEventListener('mouseup',()=>keys[key]=false);}
-bindTouch('w','w');bindTouch('a','a');bindTouch('s','s');bindTouch('d','d');bindTouch('f','f');bindTouch('g','g');
-bindTouch('up','arrowup');bindTouch('left','arrowleft');bindTouch('down','arrowdown');bindTouch('right','arrowright');bindTouch('k','k');bindTouch('l','l');
-class Gladiador{
-  constructor(x,color,dir){this.x=x;this.y=0;this.vx=0;this.color=color;this.dir=dir;this.hp=100;this.w=70;this.h=140;this.attack=0;this.cool=0;this.onGround=true;this.vy=0}
-  update(){this.cool=Math.max(0,this.cool-1); if(this.attack>0)this.attack--; this.x+=this.vx; this.vx*=0.8; if(this.x<50)this.x=50; if(this.x>c.width-50-this.w)this.x=c.width-50-this.w; this.y+=this.vy; this.vy+=0.8; if(this.y>0){this.y=0;this.vy=0;this.onGround=true}}
-  draw(){
-    ctx.save(); ctx.translate(this.x+this.w/2, c.height-80+this.y); if(this.dir<0)ctx.scale(-1,1);
-    ctx.fillStyle='rgba(0,0,0,0.4)'; ctx.beginPath(); ctx.ellipse(0,70,45,12,0,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#c68642'; ctx.fillRect(-20,20,18,45); ctx.fillRect(2,20,18,45);
-    ctx.fillStyle=this.color; ctx.fillRect(-30,5,60,30);
-    ctx.fillStyle='#d9a066'; ctx.fillRect(-18,-30,36,40);
-    ctx.fillStyle='#888'; ctx.fillRect(-22,-25,44,20);
-    let armX = this.attack>0? 30 : 18;
-    ctx.fillStyle='#d9a066'; ctx.fillRect(armX,-20, this.attack>0?35:20,14);
-    if(this.attack>10) {ctx.fillStyle='#fff'; ctx.fillRect(armX+28,-22,20,18); ctx.fillStyle='#aaa'; ctx.fillRect(armX+40,-25,8,24)}
-    ctx.fillRect(-25,-20,20,12);
-    ctx.fillStyle='#aaa'; ctx.beginPath(); ctx.arc(0,-45,22,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#444'; ctx.fillRect(-18,-58,36,12);
-    ctx.restore();
-  }
-}
-let p1=new Gladiador(150,'#a00',1), p2=new Gladiador(innerWidth-300,'#0044aa',-1);
-function checkHit(a,b){
-  if(a.attack>15 && Math.abs((a.x+a.w/2)-(b.x+b.w/2))<85 && Math.abs(a.y-b.y)<30 && b.cool==0){
-    b.hp-= a.attack>20? 12:7; b.hp=Math.max(0,b.hp); b.vx+= a.dir*12; b.cool=10;
-    if(a.dir>0) {b.x+=15} else {b.x-=15}
-  }
-}
-function loop(){
-  ctx.clearRect(0,0,c.width,c.height);
-  ctx.fillStyle='#e6c88a'; ctx.fillRect(0,c.height-80,c.width,80);
-  ctx.fillStyle='#d4af37'; for(let i=0;i<c.width;i+=80){ctx.fillRect(i,c.height-80,40,4)}
-  p1.vx=0; if(keys['a']){p1.vx=-6;p1.dir=-1} if(keys['d']){p1.vx=6;p1.dir=1} if(keys['w']&&p1.onGround){p1.vy=-15;p1.onGround=false} if(keys['f']&&p1.attack==0){p1.attack=25} if(keys['g']&&p1.attack==0){p1.attack=32}
-  if(keys['arrowleft']){p2.vx=-6;p2.dir=-1} if(keys['arrowright']){p2.vx=6;p2.dir=1} if(keys['arrowup']&&p2.onGround){p2.vy=-15;p2.onGround=false} if(keys['k']&&p2.attack==0){p2.attack=25} if(keys['l']&&p2.attack==0){p2.attack=32}
-  else if(!keys['arrowleft'] &&!keys['arrowright']){ if(Math.abs(p1.x-p2.x)>90){p2.vx = p1.x<p2.x? -3:3; p2.dir= p1.x<p2.x?-1:1}else if(Math.random()<0.06){p2.attack=25+Math.random()*10|0} }
-  p1.update(); p2.update();
-  checkHit(p1,p2); checkHit(p2,p1);
-  p1.draw(); p2.draw();
-  document.getElementById('p1fill').style.width=p1.hp+'%';
-  document.getElementById('p2fill').style.width=p2.hp+'%';
-  if(p1.hp<=0||p2.hp<=0){
-    document.getElementById('center').style.display='block';
-    document.getElementById('winText').innerText= p1.hp<=0? '¡GANA AZUL!':'¡GANA ROJO!';
-    return;
-  }
-  requestAnimationFrame(loop);
-}
-loop();
-</script>
-</body>
-                               </html>
+const canvas=document.getElementById('c'), ctx=canvas.getContext('2d');
+function resize(){canvas.width=canvas.offsetWidth*2; canvas.height=canvas.offsetHeight*2;}
+window.addEventListener('resize',resize); resize();
+let audioCtx; function initAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();}
+function playSound(t){initAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);
+if(t==='punch'){o.frequency.value=120;g.gain.setValueAtTime(0.8,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+0.15);o.type='square';}
+else if(t==='
